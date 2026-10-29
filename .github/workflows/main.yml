@@ -21,10 +21,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extraire le site
+      - name: Extraire et adapter le site
         run: |
           mkdir -p dist
           unzip -o boho-chic-site-production.zip -d dist
+          sed -i 's|src="/assets/|src="./assets/|g' dist/index.html
+          sed -i 's|href="/assets/|href="./assets/|g' dist/index.html
+          sed -i 's|"/public/assets/|"./assets/|g' dist/index.html
+          find dist/assets -name "*.js" -exec sed -i 's|/public/assets/|assets/|g' {} + || true
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
